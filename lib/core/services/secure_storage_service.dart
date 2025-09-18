@@ -9,11 +9,11 @@ class StorageService {
 
   static const String _userId = 'auth_token';
 
-  Future<void> saveUserId(String userId) async {
+  Future<void> saveToken(String userId) async {
     await _storage.write(key: _userId, value: userId);
   }
 
-  Future<String?> getUserId() async {
+  Future<String?> getUserToken() async {
     return await _storage.read(key: _userId);
   }
 

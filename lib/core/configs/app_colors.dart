@@ -8,4 +8,6 @@ class AppColors {
   static const white = Color.fromARGB(255, 255, 255, 255);
   static const grey = Colors.grey;
   static const iconColor = Color(0xffF24E1E);
+  static const black = Colors.black;
+  
 }

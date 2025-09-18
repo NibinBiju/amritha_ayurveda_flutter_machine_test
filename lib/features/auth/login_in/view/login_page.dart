@@ -28,6 +28,13 @@ class _LoginPageState extends State<LoginPage> {
       TextEditingController();
 
   @override
+  void dispose() {
+    _usernameEditingController.dispose();
+    _passwordEditingController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
@@ -126,7 +133,7 @@ class _LoginPageState extends State<LoginPage> {
                                       }
                                     },
                                   ),
-                            SizedBox(height: 100),
+                            SizedBox(height: 70),
                             _buildPrivacyPolicyText(),
                           ],
                         ),

@@ -10,7 +10,7 @@ abstract class AuthSource {
 }
 
 class AuthSourceImpl extends AuthSource {
-  final storage = StorageService();
+  final _storage = StorageService();
 
   @override
   Future<Either> userLogin({required LoginModel loginModel}) async {
@@ -21,10 +21,10 @@ class AuthSourceImpl extends AuthSource {
         data: loginModel.toJson(),
         options: Options(contentType: Headers.formUrlEncodedContentType),
       );
-      final token = response?.data['user_id'].toString();
+      final token = response?.data['token'].toString();
       final message = response?.data['message'].toString();
       if (response?.statusCode == 200 && response?.data["status"] == true) {
-        storage.saveUserId(token!);
+        _storage.saveToken(token!);
         return Right(message);
       } else {
         return Left(message);

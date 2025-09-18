@@ -1,7 +1,7 @@
-import 'package:amritha_ayurveda/common/helper/navigation_helper.dart';
 import 'package:amritha_ayurveda/core/configs/app_images.dart';
-import 'package:amritha_ayurveda/features/auth/login_in/view/login_page.dart';
+import 'package:amritha_ayurveda/features/splash_page/controller/splash_screen_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -14,13 +14,7 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
-    _startSplashDelay();
-  }
-
-  Future<void> _startSplashDelay() async {
-    await Future.delayed(const Duration(milliseconds: 200), () {
-      NavigatorWidget.push(context: context, page: LoginPage());
-    });
+    Provider.of<SplashProvider>(context, listen: false).initApp(context);
   }
 
   @override

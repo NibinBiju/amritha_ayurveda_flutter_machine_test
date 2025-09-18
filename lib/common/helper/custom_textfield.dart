@@ -25,6 +25,7 @@ class CustomTextField extends StatefulWidget {
   final bool isNumber;
   final int? maxLines;
   final Iterable<String>? autofillHints;
+  final Widget? hint;
 
   const CustomTextField({
     super.key,
@@ -50,6 +51,7 @@ class CustomTextField extends StatefulWidget {
     this.isNumber = false,
     this.maxLines = 1,
     this.autofillHints,
+    this.hint,
   });
 
   @override
@@ -62,7 +64,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 56,
+      height: 80,
       child: TextFormField(
         autofillHints: widget.autofillHints,
         maxLines: widget.maxLines,
@@ -87,8 +89,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
         onChanged: widget.onChanged,
         validator: widget.validator,
         decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 12),
           fillColor: AppColors.grey.shade200,
           isDense: true,
+          hint: widget.hint,
           label: RichText(
             text: TextSpan(
               text: widget.labelText ?? '',
@@ -96,6 +100,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 color: AppColors.grey,
                 fontSize: 18,
                 fontFamily: 'Poppins',
+                height: 60,
               ),
             ),
           ),
