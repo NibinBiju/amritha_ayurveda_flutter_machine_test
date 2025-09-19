@@ -1,29 +1,28 @@
 import 'package:amritha_ayurveda/core/configs/api_config.dart';
 import 'package:amritha_ayurveda/core/services/dio_service.dart';
 import 'package:amritha_ayurveda/core/services/secure_storage_service.dart';
-import 'package:amritha_ayurveda/data/register_form/model/branch_model.dart';
+import 'package:amritha_ayurveda/data/register_form/model/treatment_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
-class GetBranchDataProvider extends ChangeNotifier {
-  BranchModel? branchModel;
+class GetTreatMentDataProvider extends ChangeNotifier {
+  TreatmentResponse? treatmentModel;
   final _storage = StorageService();
 
-  void getBranchFormData() async {
+  void getTreatMentFormData() async {
     final String _token = await _storage.getUserToken() ?? "";
     try {
       final response = await DioService().get(
-        ApiConfig.branchListApiEndPoint,
+        ApiConfig.treatMentListApiEndPoint,
         options: Options(headers: {"Authorization": "Bearer $_token"}),
       );
-      // final message = response?.data['message'].toString();
 
       if (response?.statusCode == 200 && response?.data["status"] == true) {
-        print("Get branch response:${response?.data}");
-        branchModel = BranchModel.fromJson(response?.data);
+        print("Get treatment response:${response?.data}");
+        treatmentModel = TreatmentResponse.fromJson(response?.data);
         notifyListeners();
       } else {
-        print('Error while get branch');
+        print('Error while get treatment');
       }
     } catch (e) {
       print(e);

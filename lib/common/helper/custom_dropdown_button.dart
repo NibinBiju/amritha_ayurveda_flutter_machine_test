@@ -1,44 +1,58 @@
 import 'package:amritha_ayurveda/core/configs/app_colors.dart';
 import 'package:flutter/material.dart';
 
-class CustomDropdown<T> extends StatelessWidget {
-  final String hintText;
-  final List<DropdownMenuItem<T>> items;
+class CommonDropdownButton<T> extends StatelessWidget {
+  final String label;
+  final List<T> items;
   final T? value;
-  final void Function(T?)? onChanged;
-  final double borderRadius;
-  final Color? fillColor;
+  final String Function(T) getLabel;
+  final dynamic Function(T) getValue;
+  final void Function(dynamic)? onChanged;
+  final TextEditingController? controller;
+  final bool saveLabelInController;
 
-  const CustomDropdown({
+  const CommonDropdownButton({
     super.key,
-    required this.hintText,
+    required this.label,
     required this.items,
+    required this.getLabel,
+    required this.getValue,
     this.value,
     this.onChanged,
-    this.borderRadius = 12,
-    this.fillColor,
+    this.controller,
+    this.saveLabelInController = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: fillColor ?? AppColors.grey.shade200,
-        borderRadius: BorderRadius.circular(borderRadius),
+    return DropdownButtonFormField<dynamic>(
+      initialValue: value != null ? getValue(value as T) : null,
+      decoration: InputDecoration(
+        labelText: label,
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
       ),
-      child: DropdownButtonFormField<T>(
-        padding: EdgeInsets.symmetric(vertical: 8),
-        initialValue: value,
-        items: items,
-        onChanged: onChanged,
-        isExpanded: true,
-        decoration: const InputDecoration(border: InputBorder.none),
-        hint: Text(
-          hintText,
-          style: TextStyle(color: Colors.grey.shade600, fontSize: 16),
-        ),
-        icon: Icon(Icons.keyboard_arrow_down_rounded, color: AppColors.primary),
-      ),
+      items: items.map((item) {
+        return DropdownMenuItem<dynamic>(
+          value: getValue(item),
+          child: Text(
+            getLabel(item),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            style: const TextStyle(color: AppColors.textColor, fontSize: 14),
+          ),
+        );
+      }).toList(),
+      onChanged: (val) {
+        if (controller != null && val != null) {
+          final selectedItem = items.firstWhere(
+            (item) => getValue(item) == val,
+          );
+          controller!.text = saveLabelInController
+              ? getLabel(selectedItem)
+              : getValue(selectedItem).toString();
+        }
+        if (onChanged != null) onChanged!(val);
+      },
     );
   }
 }

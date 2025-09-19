@@ -1,5 +1,6 @@
 import 'package:amritha_ayurveda/core/configs/app_colors.dart';
 import 'package:amritha_ayurveda/core/configs/app_text_styles.dart';
+import 'package:amritha_ayurveda/data/register_form/model/treatment_model.dart';
 import 'package:amritha_ayurveda/features/register_paitent/widget/treatment_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 
@@ -168,8 +169,7 @@ class TreatmentCard extends StatelessWidget {
 
 Future<void> showTreatmentBottomSheet({
   required BuildContext context,
-  required List<String> treatments,
-  Function(String? treatment, int maleCount, int femaleCount)? onSave,
+  required List<TreatmentResponse> treatments,
 }) {
   return showModalBottomSheet(
     context: context,
@@ -178,8 +178,8 @@ Future<void> showTreatmentBottomSheet({
     builder: (_) {
       return TreatmentBottomSheet.treatmentBottomSheet(
         treatments: treatments,
-        onSave: onSave,
       );
     },
   );
 }
+

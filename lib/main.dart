@@ -1,6 +1,9 @@
 import 'package:amritha_ayurveda/core/theme/theme.dart';
 import 'package:amritha_ayurveda/features/auth/login_in/controller/login_provider.dart';
 import 'package:amritha_ayurveda/features/homepage/controller/home_page_provider.dart';
+import 'package:amritha_ayurveda/features/register_paitent/controller/get_form_field_data.dart';
+import 'package:amritha_ayurveda/features/register_paitent/controller/get_treatments_data.dart';
+import 'package:amritha_ayurveda/features/register_paitent/controller/post_patient_reigister.dart';
 import 'package:amritha_ayurveda/features/register_paitent/controller/treatment_add_provider.dart';
 import 'package:amritha_ayurveda/features/splash_page/controller/splash_screen_provider.dart';
 import 'package:amritha_ayurveda/features/splash_page/view/splash_page.dart';
@@ -32,6 +35,15 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<TreatmentAddProvider>(
           create: (context) => TreatmentAddProvider(),
+        ),
+        ChangeNotifierProvider<GetBranchDataProvider>(
+          create: (context) => GetBranchDataProvider(),
+        ),
+        ChangeNotifierProvider<GetTreatMentDataProvider>(
+          create: (context) => GetTreatMentDataProvider(),
+        ),
+        ChangeNotifierProvider<PostPatientReigisterProvider>(
+          create: (context) => PostPatientReigisterProvider(),
         ),
       ],
       child: MaterialApp(

@@ -1,10 +1,13 @@
+import 'package:amritha_ayurveda/common/helper/custom_dropdown_button.dart';
+import 'package:amritha_ayurveda/data/register_form/model/treatment_model.dart';
 import 'package:amritha_ayurveda/domain/register_form/entity/register_treatment_entity.dart';
+import 'package:amritha_ayurveda/features/register_paitent/controller/get_treatments_data.dart';
 import 'package:amritha_ayurveda/features/register_paitent/controller/treatment_add_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class TreatmentBottomSheet extends StatefulWidget {
-  final List<String> treatments;
+  final List<TreatmentResponse> treatments;
   final Function(String? treatment, int maleCount, int femaleCount)? onSave;
 
   const TreatmentBottomSheet.treatmentBottomSheet({
@@ -18,13 +21,18 @@ class TreatmentBottomSheet extends StatefulWidget {
 }
 
 class _TreatmentBottomSheetState extends State<TreatmentBottomSheet> {
-  String? selectedTreatment;
+  TreatmentModel? selectedTreatment;
+  String? selectedTreatmentName;
+  final TextEditingController _treatnameController = TextEditingController();
+
   int maleCount = 0;
   int femaleCount = 0;
 
   @override
   Widget build(BuildContext context) {
     var treatmentProvider = Provider.of<TreatmentAddProvider>(context);
+    var treatmentgetProvider = Provider.of<GetTreatMentDataProvider>(context);
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: const BoxDecoration(
@@ -48,24 +56,18 @@ class _TreatmentBottomSheetState extends State<TreatmentBottomSheet> {
               border: Border.all(color: Colors.grey.shade300),
               color: Colors.grey.shade100,
             ),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton<String>(
-                hint: const Text("Choose preferred treatment"),
-                value: selectedTreatment,
-                isExpanded: true,
-                icon: const Icon(
-                  Icons.keyboard_arrow_down_rounded,
-                  color: Colors.green,
-                ),
-                items: widget.treatments
-                    .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-                    .toList(),
-                onChanged: (value) {
-                  setState(() {
-                    selectedTreatment = value;
-                  });
-                },
-              ),
+            child: CommonDropdownButton<TreatmentModel>(
+              controller: _treatnameController,
+              label: 'Select Treatments',
+              items: treatmentgetProvider.treatmentModel?.treatments ?? [],
+              getLabel: (treatment) => treatment.name,
+              getValue: (treatment) => treatment.id,
+              value: selectedTreatment,
+              onChanged: (value) {
+                setState(() {
+                  selectedTreatmentName = _treatnameController.text.trim();
+                });
+              },
             ),
           ),
           const SizedBox(height: 20),
@@ -99,12 +101,12 @@ class _TreatmentBottomSheetState extends State<TreatmentBottomSheet> {
                 padding: const EdgeInsets.symmetric(vertical: 14),
               ),
               onPressed: () {
-                widget.onSave?.call(selectedTreatment, maleCount, femaleCount);
                 treatmentProvider.addTreatMent(
                   treatMentEntity: RegisterTreatmentEntity(
-                    treatMentName: selectedTreatment ?? "",
+                    treatMentName: selectedTreatmentName ?? "",
                     maleCount: maleCount,
                     femaleCount: femaleCount,
+                    treatmentId: int.parse(selectedTreatmentName ?? '0'),
                   ),
                 );
                 Navigator.pop(context);

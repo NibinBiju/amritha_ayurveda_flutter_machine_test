@@ -42,7 +42,7 @@ class PatientBookingModel {
 class Patient {
   int? id;
   List<PatientdetailsSet>? patientdetailsSet;
-  Branch? branch;
+  BookingBranch? branch;
   String? user;
   String? payment;
   String? name;
@@ -87,7 +87,9 @@ class Patient {
               (x) => PatientdetailsSet.fromJson(x),
             ),
           ),
-    branch: json["branch"] == null ? null : Branch.fromJson(json["branch"]),
+    branch: json["branch"] == null
+        ? null
+        : BookingBranch.fromJson(json["branch"]),
     user: json["user"],
     payment: json["payment"],
     name: json["name"],
@@ -133,7 +135,7 @@ class Patient {
   };
 }
 
-class Branch {
+class BookingBranch {
   int? id;
   String? name;
   int? patientsCount;
@@ -144,7 +146,7 @@ class Branch {
   String? gst;
   bool? isActive;
 
-  Branch({
+  BookingBranch({
     this.id,
     this.name,
     this.patientsCount,
@@ -156,7 +158,7 @@ class Branch {
     this.isActive,
   });
 
-  factory Branch.fromJson(Map<String, dynamic> json) => Branch(
+  factory BookingBranch.fromJson(Map<String, dynamic> json) => BookingBranch(
     id: json["id"],
     name: json["name"],
     patientsCount: json["patients_count"],
@@ -252,7 +254,7 @@ extension PatientMapper on Patient {
   }
 }
 
-extension BranchMapper on Branch {
+extension BranchMapper on BookingBranch {
   BranchEntity toEntity() {
     return BranchEntity(
       id: id ?? 0,

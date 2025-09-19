@@ -20,7 +20,7 @@ class CustomTextField extends StatefulWidget {
   final int? maxLines;
   final Iterable<String>? autofillHints;
   final Widget? hint;
-  final bool isDate; // <-- NEW for date picker
+  final bool isDate;
   final DateTime? firstDate;
   final DateTime? lastDate;
 
@@ -43,7 +43,7 @@ class CustomTextField extends StatefulWidget {
     this.maxLines = 1,
     this.autofillHints,
     this.hint,
-    this.isDate = false, // default false
+    this.isDate = false,
     this.firstDate,
     this.lastDate,
   });
@@ -82,13 +82,11 @@ class _CustomTextFieldState extends State<CustomTextField> {
         obscureText: widget.isPassword ? _obscure : false,
         textInputAction: widget.inputAction,
         enabled: widget.isEnabled,
-        readOnly: widget.isDate, // make readOnly for date
+        readOnly: widget.isDate,
         inputFormatters: widget.isNumber
             ? [FilteringTextInputFormatter.digitsOnly]
             : [],
-        onTap: widget.isDate
-            ? () => _pickDate(context)
-            : null, // open date picker if date field
+        onTap: widget.isDate ? () => _pickDate(context) : null,
         onFieldSubmitted: (value) {
           if (widget.onSubmit != null) {
             widget.onSubmit!(value);
@@ -125,8 +123,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   onPressed: () => setState(() => _obscure = !_obscure),
                 )
               : widget.isDate
-                  ? Icon(Icons.calendar_today, size: 20) // calendar icon
-                  : widget.suffixWidget,
+              ? Icon(Icons.calendar_today, size: 20)
+              : widget.suffixWidget,
         ),
       ),
     );

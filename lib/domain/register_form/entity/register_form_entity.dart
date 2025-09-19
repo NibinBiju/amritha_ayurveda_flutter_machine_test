@@ -1,4 +1,4 @@
-class Appointment {
+class PatientRegisterModel {
   final String name;
   final String executive;
   final String payment;
@@ -8,14 +8,14 @@ class Appointment {
   final double discountAmount;
   final double advanceAmount;
   final double balanceAmount;
-  final String dateAndTime;
+  final String dateAndTime; 
   final String id;
   final List<int> male;
   final List<int> female;
-  final String branch;
+  final int branch;
   final List<int> treatments;
 
-  Appointment({
+  PatientRegisterModel({
     required this.name,
     required this.executive,
     required this.payment,
@@ -32,11 +32,6 @@ class Appointment {
     required this.branch,
     required this.treatments,
   });
-
-  static List<int> parseIdList(String ids) {
-    if (ids.isEmpty) return [];
-    return ids.split(',').map((e) => int.tryParse(e.trim()) ?? 0).toList();
-  }
 
   Map<String, dynamic> toJson() {
     return {
@@ -58,8 +53,20 @@ class Appointment {
     };
   }
 
-  factory Appointment.fromJson(Map<String, dynamic> json) {
-    return Appointment(
+  factory PatientRegisterModel.fromJson(Map<String, dynamic> json) {
+    List<int> parseIdList(dynamic data) {
+      if (data == null) return [];
+      if (data is String) {
+        return data.split(',').map((e) => int.tryParse(e.trim()) ?? 0).toList();
+      } else if (data is List) {
+        return data
+            .map((e) => e is int ? e : int.tryParse(e.toString()) ?? 0)
+            .toList();
+      }
+      return [];
+    }
+
+    return PatientRegisterModel(
       name: json["name"] ?? "",
       executive: json["executive"] ?? "",
       payment: json["payment"] ?? "",
@@ -71,10 +78,10 @@ class Appointment {
       balanceAmount: (json["balance_amount"] ?? 0).toDouble(),
       dateAndTime: json["date_nd_time"] ?? "",
       id: json["id"] ?? "",
-      male: parseIdList(json["male"] ?? ""),
-      female: parseIdList(json["female"] ?? ""),
-      branch: json["branch"] ?? "",
-      treatments: parseIdList(json["treatments"] ?? ""),
+      male: parseIdList(json["male"]),
+      female: parseIdList(json["female"]),
+      branch: (json["branch"] ?? 0),
+      treatments: parseIdList(json["treatments"]),
     );
   }
 }
