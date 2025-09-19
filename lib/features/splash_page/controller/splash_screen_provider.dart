@@ -10,9 +10,9 @@ class SplashProvider extends ChangeNotifier {
   Future<void> initApp(BuildContext context) async {
     await Future.delayed(const Duration(milliseconds: 200));
 
-    final token = await _storageService.getUserToken();
+    final _token = await _storageService.getUserToken();
 
-    if (token != null && token.isNotEmpty) {
+    if (_token != null && _token.isNotEmpty) {
       NavigatorWidget.pushAndRemovePages(
         context: context,
         page: const HomePage(),

@@ -1,6 +1,7 @@
 import 'package:amritha_ayurveda/core/theme/theme.dart';
 import 'package:amritha_ayurveda/features/auth/login_in/controller/login_provider.dart';
 import 'package:amritha_ayurveda/features/homepage/controller/home_page_provider.dart';
+import 'package:amritha_ayurveda/features/register_paitent/controller/treatment_add_provider.dart';
 import 'package:amritha_ayurveda/features/splash_page/controller/splash_screen_provider.dart';
 import 'package:amritha_ayurveda/features/splash_page/view/splash_page.dart';
 import 'package:amritha_ayurveda/get_servcie_locator.dart';
@@ -28,6 +29,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<SplashProvider>(
           create: (context) => SplashProvider(),
+        ),
+        ChangeNotifierProvider<TreatmentAddProvider>(
+          create: (context) => TreatmentAddProvider(),
         ),
       ],
       child: MaterialApp(

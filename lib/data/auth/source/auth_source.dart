@@ -21,10 +21,10 @@ class AuthSourceImpl extends AuthSource {
         data: loginModel.toJson(),
         options: Options(contentType: Headers.formUrlEncodedContentType),
       );
-      final token = response?.data['token'].toString();
+      final _token = response?.data['token'].toString();
       final message = response?.data['message'].toString();
       if (response?.statusCode == 200 && response?.data["status"] == true) {
-        _storage.saveToken(token!);
+        _storage.saveToken(_token!);
         return Right(message);
       } else {
         return Left(message);

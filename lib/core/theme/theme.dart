@@ -8,16 +8,16 @@ class AppTheme {
     scaffoldBackgroundColor: Colors.white,
     brightness: Brightness.light,
     fontFamily: 'Poppins',
-    hintColor: AppColors.grey,
+    hintColor: AppColors.textColor,
     textSelectionTheme: TextSelectionThemeData(
       cursorColor: AppColors.textColor,
     ),
 
     inputDecorationTheme: InputDecorationTheme(
-      hintStyle: TextStyle(fontFamily: 'Poppins'),
-      errorStyle: TextStyle(fontFamily: 'Poppins'),
-      labelStyle: TextStyle(fontFamily: 'Poppins'),
-      prefixStyle: TextStyle(fontFamily: 'Poppins'),
+      hintStyle: TextStyle(fontFamily: 'Poppins', color: AppColors.textColor),
+      errorStyle: TextStyle(fontFamily: 'Poppins', color: AppColors.textColor),
+      labelStyle: TextStyle(fontFamily: 'Poppins', color: AppColors.textColor),
+      prefixStyle: TextStyle(fontFamily: 'Poppins', color: AppColors.textColor),
       filled: true,
       fillColor: AppColors.background,
 

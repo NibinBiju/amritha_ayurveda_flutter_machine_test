@@ -9,9 +9,6 @@ class CustomTextField extends StatefulWidget {
   final TextEditingController? controller;
   final TextInputType? inputType;
   final TextInputAction? inputAction;
-  final FocusNode? focusNode;
-  final FocusNode? nextFocus;
-  final bool autoFocus;
   final Function(String)? onSubmit;
   final Function(String)? onChanged;
   final String? Function(String?)? validator;
@@ -19,13 +16,13 @@ class CustomTextField extends StatefulWidget {
   final IconData? prefixIcon;
   final IconData? suffixIcon;
   final Widget? suffixWidget;
-  final VoidCallback? onSuffixTap;
-  final bool isLocation;
-  final void Function()? onLocationTap;
   final bool isNumber;
   final int? maxLines;
   final Iterable<String>? autofillHints;
   final Widget? hint;
+  final bool isDate; // <-- NEW for date picker
+  final DateTime? firstDate;
+  final DateTime? lastDate;
 
   const CustomTextField({
     super.key,
@@ -35,23 +32,20 @@ class CustomTextField extends StatefulWidget {
     this.controller,
     this.inputType = TextInputType.text,
     this.inputAction = TextInputAction.next,
-    this.focusNode,
-    this.nextFocus,
-    this.autoFocus = false,
     this.onSubmit,
     this.onChanged,
     this.validator,
     this.showBorder = true,
     this.prefixIcon,
     this.suffixIcon,
-    this.onSuffixTap,
-    this.isLocation = false,
-    this.onLocationTap,
     this.suffixWidget,
     this.isNumber = false,
     this.maxLines = 1,
     this.autofillHints,
     this.hint,
+    this.isDate = false, // default false
+    this.firstDate,
+    this.lastDate,
   });
 
   @override
@@ -61,27 +55,41 @@ class CustomTextField extends StatefulWidget {
 class _CustomTextFieldState extends State<CustomTextField> {
   bool _obscure = true;
 
+  Future<void> _pickDate(BuildContext context) async {
+    final pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: widget.firstDate ?? DateTime(1900),
+      lastDate: widget.lastDate ?? DateTime(2100),
+    );
+
+    if (pickedDate != null) {
+      widget.controller?.text =
+          "${pickedDate.day}-${pickedDate.month}-${pickedDate.year}";
+      if (widget.onChanged != null) {
+        widget.onChanged!(widget.controller!.text);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 80,
       child: TextFormField(
         autofillHints: widget.autofillHints,
         maxLines: widget.maxLines,
         controller: widget.controller,
-        focusNode: widget.focusNode,
         obscureText: widget.isPassword ? _obscure : false,
         textInputAction: widget.inputAction,
         enabled: widget.isEnabled,
-        autofocus: widget.autoFocus,
-
+        readOnly: widget.isDate, // make readOnly for date
         inputFormatters: widget.isNumber
             ? [FilteringTextInputFormatter.digitsOnly]
             : [],
+        onTap: widget.isDate
+            ? () => _pickDate(context)
+            : null, // open date picker if date field
         onFieldSubmitted: (value) {
-          if (widget.nextFocus != null) {
-            FocusScope.of(context).requestFocus(widget.nextFocus);
-          }
           if (widget.onSubmit != null) {
             widget.onSubmit!(value);
           }
@@ -89,6 +97,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         onChanged: widget.onChanged,
         validator: widget.validator,
         decoration: InputDecoration(
+          hintStyle: TextStyle(color: AppColors.textColor, fontSize: 16),
           contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 12),
           fillColor: AppColors.grey.shade200,
           isDense: true,
@@ -97,14 +106,13 @@ class _CustomTextFieldState extends State<CustomTextField> {
             text: TextSpan(
               text: widget.labelText ?? '',
               style: TextStyle(
-                color: AppColors.grey,
+                color: const Color.fromARGB(255, 73, 73, 73),
                 fontSize: 18,
                 fontFamily: 'Poppins',
                 height: 60,
               ),
             ),
           ),
-
           prefixIcon: widget.prefixIcon != null
               ? Icon(widget.prefixIcon, size: 20)
               : null,
@@ -116,17 +124,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   ),
                   onPressed: () => setState(() => _obscure = !_obscure),
                 )
-              : widget.isLocation
-              ? InkWell(
-                  onTap: widget.onLocationTap,
-                  child: Icon(Icons.location_on_outlined, size: 20),
-                )
-              : widget.suffixIcon != null
-              ? IconButton(
-                  icon: Icon(widget.suffixIcon, size: 20),
-                  onPressed: widget.onSuffixTap,
-                )
-              : widget.suffixWidget,
+              : widget.isDate
+                  ? Icon(Icons.calendar_today, size: 20) // calendar icon
+                  : widget.suffixWidget,
         ),
       ),
     );

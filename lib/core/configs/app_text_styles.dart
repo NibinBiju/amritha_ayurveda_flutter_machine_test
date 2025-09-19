@@ -21,7 +21,7 @@ class AppTextStyles {
   static const TextStyle heading3 = TextStyle(
     fontSize: 20,
     fontWeight: FontWeight.w500,
-    color: Color.fromARGB(255, 20, 20, 20),
+    color: Color.fromARGB(255, 56, 56, 56),
   );
 
   static const TextStyle bodyLarge = TextStyle(
@@ -52,7 +52,7 @@ class AppTextStyles {
     fontSize: 16,
     fontWeight: FontWeight.w400,
     letterSpacing: 1.25,
-    color: Colors.black,
+    color: Color.fromARGB(255, 70, 70, 70),
   );
 
   static const TextStyle labelSmall = TextStyle(

@@ -1,34 +1,30 @@
 import 'package:amritha_ayurveda/core/configs/api_config.dart';
 import 'package:amritha_ayurveda/core/services/dio_service.dart';
 import 'package:amritha_ayurveda/core/services/secure_storage_service.dart';
-import 'package:dartz/dartz.dart';
+import 'package:amritha_ayurveda/data/register_form/model/branch_model.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 
-abstract class HomePageSource {
-  Future<Either> getBookings();
-}
-
-class HomePageSourceImpl extends HomePageSource {
+class GetFormFieldDataProvider extends ChangeNotifier {
+  BranchModel? branchModel;
   final _storage = StorageService();
 
-  @override
-  Future<Either> getBookings() async {
+  void getBranchFormData() async {
     final String _token = await _storage.getUserToken() ?? "";
     try {
       final response = await DioService().get(
-        ApiConfig.patientListApiEndPoint,
+        ApiConfig.branchListApiEndPoint,
         options: Options(headers: {"Authorization": "Bearer $_token"}),
       );
       final message = response?.data['message'].toString();
-      print(response?.data);
 
       if (response?.statusCode == 200 && response?.data["status"] == true) {
-        return Right(response?.data);
+        branchModel = branchModelFromJson(response?.data);
       } else {
-        return Left(message);
+        print(message);
       }
     } catch (e) {
-      return Left(e);
+      print(e);
     }
   }
 }
